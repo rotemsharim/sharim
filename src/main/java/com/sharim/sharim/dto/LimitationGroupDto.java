@@ -11,8 +11,6 @@ public class LimitationGroupDto {
 
     int limGroupId;
 
-    String empId;
-
     List<LimitationDto> limitationList;
 }
 

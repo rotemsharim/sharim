@@ -1,7 +1,6 @@
 package com.sharim.sharim.repository;
 
-import com.sharim.sharim.entities.Employee;
-import com.sharim.sharim.entities.Limitation;
+import com.sharim.sharim.entities.LimitationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,13 +8,13 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface LimitationRepository extends JpaRepository<Limitation, Integer> {
+public interface LimitationRepository extends JpaRepository<LimitationEntity, Integer> {
 
-    List<Limitation> findByLimGroup(int limGroup);
+    List<LimitationEntity> findByLimGroup(int limGroup);
 
-    List<Limitation> findByEmpId(String empId);
+    List<LimitationEntity> findByEmpId(String empId);
 
-    List<Limitation> findByEmpIdAndStartDateAndEndDate(String empId, Date startDate, Date endDate);
+    List<LimitationEntity> findByEmpIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(String empId, Date startDate, Date endDate);
 
 
 }

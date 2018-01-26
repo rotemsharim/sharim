@@ -1,22 +1,23 @@
 package com.sharim.sharim.services;
 
-import com.sharim.sharim.entities.Employee;
+import com.sharim.sharim.entities.EmployeeEntity;
 import com.sharim.sharim.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Employee findOne(String id) {
-        return employeeRepository.findOne(id);
+    public Optional<EmployeeEntity> findOne(String id) {
+        return Optional.ofNullable(employeeRepository.findOne(id));
     }
 
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
+    public Optional<List<EmployeeEntity>> findAll() {
+        return Optional.ofNullable(employeeRepository.findAll());
     }
 }

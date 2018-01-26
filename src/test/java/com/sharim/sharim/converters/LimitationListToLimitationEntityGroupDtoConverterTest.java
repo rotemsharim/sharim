@@ -1,29 +1,28 @@
 package com.sharim.sharim.converters;
 
 import com.sharim.sharim.dto.LimitationGroupDto;
-import com.sharim.sharim.entities.Limitation;
+import com.sharim.sharim.entities.LimitationEntity;
 import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.testng.Assert.*;
 
-public class LimitationListToLimitationGroupDtoConverterTest {
+public class LimitationListToLimitationEntityGroupDtoConverterTest {
 
     @Test
     public void shouldSortLimitationsToGroups() {
-        Limitation lim1 = new Limitation();
+        LimitationEntity lim1 = new LimitationEntity();
         lim1.setLimId(1);
         lim1.setLimGroup(1);
 
-        Limitation lim2 = new Limitation();
+        LimitationEntity lim2 = new LimitationEntity();
         lim2.setLimId(2);
         lim2.setLimGroup(1);
 
 
-        Limitation lim3 = new Limitation();
+        LimitationEntity lim3 = new LimitationEntity();
         lim3.setLimId(3);
         lim3.setLimGroup(2);
 

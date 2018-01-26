@@ -1,10 +1,8 @@
 package com.sharim.sharim.converters;
 
-import com.sharim.sharim.dto.EmployeeDto;
 import com.sharim.sharim.dto.LimitationDto;
 import com.sharim.sharim.dto.LimitationGroupDto;
-import com.sharim.sharim.entities.Employee;
-import com.sharim.sharim.entities.Limitation;
+import com.sharim.sharim.entities.LimitationEntity;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +14,16 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Component
-public class LimitationListToLimitationGroupDtoConverter implements Converter<List<Limitation>, List<LimitationGroupDto>> {
+public class LimitationListToLimitationGroupDtoConverter implements Converter<List<LimitationEntity>, List<LimitationGroupDto>> {
 
 
     @Override
-    public List<LimitationGroupDto> convert(List<Limitation> source) {
+    public List<LimitationGroupDto> convert(List<LimitationEntity> source) {
 
         List<LimitationGroupDto> limitationGroupDtoList = new ArrayList<>();
 
-        Map<Integer, List<Limitation>> limitationGroup =
-                source.stream().collect(groupingBy(Limitation::getLimGroup));
+        Map<Integer, List<LimitationEntity>> limitationGroup =
+                source.stream().collect(groupingBy(LimitationEntity::getLimGroup));
 
 
         limitationGroup.forEach((groupId,list) -> {
@@ -42,7 +40,7 @@ public class LimitationListToLimitationGroupDtoConverter implements Converter<Li
 
     }
 
-    private LimitationDto convert(Limitation limitation) {
+    private LimitationDto convert(LimitationEntity limitation) {
         return LimitationDto.builder()
                 .limId(limitation.getLimId())
                 .startDate(limitation.getStartDate())

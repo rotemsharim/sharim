@@ -14,13 +14,13 @@ import java.util.Date;
 @Entity
 @Table(name = "limitation")
 @Data
-public class Limitation {
+public class LimitationEntity {
 
     @Id
     @Column(name = "lim_num")
     int limId;
 
-    int empId;
+    String empId;
 
     Date startDate;
 
@@ -28,7 +28,7 @@ public class Limitation {
 
     String comment;
 
-    boolean limStaus;
+    boolean limStatus;
 
     Date insertDate;
 
