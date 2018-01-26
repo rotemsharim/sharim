@@ -2,6 +2,7 @@ package com.sharim.sharim.resource;
 
 import com.sharim.sharim.converters.EmployeeToEmployeeDtoConverter;
 import com.sharim.sharim.converters.LimitationToLimitationDtoConverter;
+import com.sharim.sharim.converters.PerformanceToPerformanceDtoConverter;
 import com.sharim.sharim.entities.EmployeeEntity;
 import com.sharim.sharim.entities.LimitationEntity;
 import com.sharim.sharim.entities.PerformanceEmployeeEntity;
@@ -40,7 +41,7 @@ public class EmpolyeeResource {
     LimitationToLimitationDtoConverter limitationToLimitationDtoConverter;
 
     @Autowired
-    PerformanceEmployeeRepository performanceEmployeeRepository;
+    PerformanceToPerformanceDtoConverter performanceToPerformanceDtoConverter;
 
     @RequestMapping
     public ResponseEntity<?> allEmployees() {
@@ -79,7 +80,7 @@ public class EmpolyeeResource {
 
         return new ResponseEntity<>(limitationList.get().stream()
                 .map(l -> limitationToLimitationDtoConverter.convert(l))
-                .collect(Collectors.toList()),HttpStatus.OK);
+                .collect(Collectors.toList()), HttpStatus.OK);
 
     }
 
@@ -90,20 +91,16 @@ public class EmpolyeeResource {
                                             @RequestParam(required = true) Long to) throws Exception {
 
 
-
-        List<PerformanceEmployeeEntity> performanceEmployeeEntityList = performanceEmployeeRepository.findById_EmpIdAndId_Performance_PerformanceDateGreaterThanEqualAndId_Performance_PerformanceDateLessThanEqual(id, new Date(from), new Date(to));
-
-
         Optional<List<PerformanceEntity>> performanceList = performanceService.findByEmpIdAndStartDateRange(id, new Date(from), new Date(to));
 
-        if (!performanceList.isPresent()) {
+        if (!performanceList.isPresent() || performanceList.get().size() == 0) {
             return new ResponseEntity<>("no limitations for employee between these dates", HttpStatus.NO_CONTENT);
         }
 
-//        return new ResponseEntity<>(limitationList.get().stream()
-//                .map(l -> limitationToLimitationDtoConverter.convert(l))
-//                .collect(Collectors.toList()),HttpStatus.OK);
-        return new ResponseEntity<>(performanceEmployeeEntityList,HttpStatus.OK);
+        return new ResponseEntity<>(performanceList.get().stream()
+                .map(p -> performanceToPerformanceDtoConverter.convert(p))
+                .collect(Collectors.toList()), HttpStatus.OK);
+
 
     }
 
