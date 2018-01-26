@@ -85,7 +85,7 @@ public class EmpolyeeResource {
     }
 
 
-    @RequestMapping("/{id}/performance")
+    @RequestMapping("/{id}/performances")
     public ResponseEntity<?> getPerformance(@PathVariable("id") String id,
                                             @RequestParam(required = true) Long from,
                                             @RequestParam(required = true) Long to) throws Exception {
@@ -100,8 +100,6 @@ public class EmpolyeeResource {
         return new ResponseEntity<>(performanceList.get().stream()
                 .map(p -> performanceToPerformanceDtoConverter.convert(p))
                 .collect(Collectors.toList()), HttpStatus.OK);
-
-
     }
 
 
