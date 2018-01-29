@@ -16,6 +16,7 @@ public class EmployeeToEmployeeDtoConverter implements Converter<EmployeeEntity,
                 .lName(source.getLName())
                 .empId(source.getEmpId())
                 .email(source.getEmail())
+                .status(source.getStatus())
                 .build();
     }
 }

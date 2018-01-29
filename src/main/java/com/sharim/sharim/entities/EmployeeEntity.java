@@ -20,4 +20,8 @@ public class EmployeeEntity {
     String lName;
 
     String email;
+
+    @Column(name = "auth")
+    AuthenticationEntity.EmployeeStatus status;
+
 }

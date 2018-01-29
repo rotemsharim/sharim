@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
-public class EmpolyeeResource {
+public class EmployeeResource {
 
     @Autowired
     EmployeeService employeeService;
@@ -46,6 +46,7 @@ public class EmpolyeeResource {
     PerformanceToPerformanceDtoConverter performanceToPerformanceDtoConverter;
 
     @RequestMapping
+    @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> allEmployees() {
         Optional<List<EmployeeEntity>> employeeList = employeeService.findAll();
 
