@@ -40,17 +40,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     ) throws IOException, ServletException {
 
         String username;
+
         String authToken = tokenHelper.getToken(request);
 
         if (authToken != null) {
             // get username from token
             username = tokenHelper.getUsernameFromToken(authToken);
+
             if (username != null) {
                 // get user
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (tokenHelper.validateToken(authToken, userDetails)) {
                     // create authentication
                     TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
+
                     authentication.setToken(authToken);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

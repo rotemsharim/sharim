@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import static com.sharim.sharim.entities.AuthenticationEntity.EmployeeStatus.NotActive;
 
@@ -23,7 +24,7 @@ public class AuthenticationEntity implements UserDetails {
 
 
     public enum EmployeeStatus {
-        Manager, Regular, NotActive
+        Admin, Regular, NotActive
     }
 
     @Id
@@ -39,7 +40,8 @@ public class AuthenticationEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("USER"));
+
+        return Arrays.asList(new SimpleGrantedAuthority(status.name()),new SimpleGrantedAuthority(empId));
     }
 
     @Override

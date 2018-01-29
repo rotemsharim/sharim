@@ -14,37 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthenticationService  extends AbstractUserDetailsAuthenticationProvider implements UserDetailsService {
 
-//    String secret;
-//    int expirationTime;
-
     @Autowired
     AuthenticationRepository authenticationRepository;
-
-//    public AuthenticationService(String secret, int expirationTime) {
-//        this.secret = secret;
-//        this.expirationTime = expirationTime;
-//    }
-//
-//    public AuthenticationEntity authenticateUser(String username, String password) {
-//
-//        AuthenticationEntity authenticationEntity = authenticationRepository
-//                .findUniqueByUsernameAndPasswordAndStatusNot(username, password, AuthenticationEntity.EmployeeStatus.NotActive);
-//
-//        if (authenticationEntity == null) {
-//            return null;
-//        }
-//
-//        return authenticationEntity;
-//    }
-//
-//    private Date getExpirationDate() {
-//        Date now = new Date();
-//        Long expireInMilis = TimeUnit.HOURS.toMillis(expirationTime);
-//
-//
-//
-//        return new Date(expireInMilis + now.getTime());
-//    }
 
 
     @Override

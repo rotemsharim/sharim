@@ -15,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.PermitAll;
+import javax.xml.ws.WebServiceException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -61,8 +63,14 @@ public class EmployeeResource {
     }
 
     @RequestMapping("/{id}")
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> findEmployee(@PathVariable("id") String id) throws Exception {
+//        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        if (!id.equals(userId)) {
+//            return new ResponseEntity<>("cannot access user",HttpStatus.FORBIDDEN);
+//        }
+
+
         Optional<EmployeeEntity> employee = employeeService.findOne(id);
         if (!employee.isPresent()) {
             return new ResponseEntity<>("employee doesn't exist", HttpStatus.NO_CONTENT);

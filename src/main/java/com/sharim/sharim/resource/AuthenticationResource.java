@@ -23,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by fan.jin on 2017-05-10.
@@ -62,7 +64,8 @@ public class AuthenticationResource {
 
         // token creation
         AuthenticationEntity user = (AuthenticationEntity)authentication.getPrincipal();
-        String jws = tokenHelper.generateToken( user.getUsername(), device);
+
+        String jws = tokenHelper.generateToken( user.getUsername(),user.getEmpId(), device);
         int expiresIn = tokenHelper.getExpiredIn(device);
         // Return the token
         return ResponseEntity.ok(new UserTokenState(jws, expiresIn));

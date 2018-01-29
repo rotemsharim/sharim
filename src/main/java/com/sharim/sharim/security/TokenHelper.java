@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 
 /**
@@ -56,6 +57,17 @@ public class TokenHelper {
         return username;
     }
 
+    public String getUserIdFromToken(String token) {
+        String userId;
+        try {
+            final Claims claims = this.getAllClaimsFromToken(token);
+            userId = (String) claims.get("userId");
+        } catch (Exception e) {
+            userId = null;
+        }
+        return userId;
+    }
+
     public Date getIssuedAtDateFromToken(String token) {
         Date issueAt;
         try {
@@ -95,13 +107,14 @@ public class TokenHelper {
         return refreshedToken;
     }
 
-    public String generateToken(String username, Device device) {
+    public String generateToken(String username, String userId, Device device) {
         String audience = generateAudience(device);
         return Jwts.builder()
                 .setIssuer( APP_NAME )
                 .setSubject(username)
                 .setAudience(audience)
                 .setIssuedAt(new Date())
+                .claim("userId",userId)
                 .setExpiration(generateExpirationDate(device))
                 .signWith( SIGNATURE_ALGORITHM, SECRET )
                 .compact();
