@@ -8,23 +8,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/auth")
+//@RestController
+//@RequestMapping("/auth")
 public class AuthenticationResource {
 
-    @Autowired
-    AuthenticationService authenticationService;
-
-    @RequestMapping
-    public ResponseEntity<?> authenticate(String username, String password) {
-
-        AuthenticationEntity authenticationEntity = authenticationService.authenticateUser(username, password);
-
-        if (authenticationEntity == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        return ResponseEntity.ok(authenticationEntity);
-    }
+//    @Autowired
+//    AuthenticationService authenticationService;
+//
+//    @RequestMapping
+//    public ResponseEntity<?> authenticate(String username, String password) {
+//
+//        AuthenticationEntity authenticationEntity = authenticationService.authenticateUser(username, password);
+//
+//        if (authenticationEntity == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//
+//        return ResponseEntity.ok(authenticationEntity);
+//    }
 
 }
