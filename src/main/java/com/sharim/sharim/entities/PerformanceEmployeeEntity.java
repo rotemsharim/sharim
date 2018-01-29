@@ -1,6 +1,6 @@
 package com.sharim.sharim.entities;
 
-import com.sharim.sharim.converters.EmployeeStatusConverter;
+import com.sharim.sharim.converters.EmployeePerformanceStatusConverter;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ public class PerformanceEmployeeEntity {
     @EmbeddedId
     IdKey id;
 
-    @Convert(converter = EmployeeStatusConverter.class)
+    @Convert(converter = EmployeePerformanceStatusConverter.class)
     @Column(name = "status")
     boolean active;
 

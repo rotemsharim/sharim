@@ -1,30 +1,40 @@
 package com.sharim.sharim.converters;
 
+import com.sharim.sharim.entities.AuthenticationEntity;
+
 import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 
-public class EmployeeStatusConverter implements AttributeConverter<Boolean, String> {
+import static com.sharim.sharim.entities.AuthenticationEntity.EmployeeStatus.*;
 
-    private static final String ACTIVE = "פעיל";
-    private static final String CANCELLED = "מבוטל";
-
+@Converter(autoApply = true)
+public class EmployeeStatusConverter implements AttributeConverter<AuthenticationEntity.EmployeeStatus, String> {
     @Override
-    public String convertToDatabaseColumn(Boolean attribute) {
-        if (attribute) {
-            return ACTIVE;
+    public String convertToDatabaseColumn(AuthenticationEntity.EmployeeStatus attribute) {
+        switch (attribute) {
+            case Manager:
+                return "מנהל";
+            case Regular:
+                return "עובד";
+            case NotActive:
+                return "מוקפא";
+            default:
+                return "";
         }
-
-        return CANCELLED;
     }
 
     @Override
-    public Boolean convertToEntityAttribute(String dbData) {
+    public AuthenticationEntity.EmployeeStatus convertToEntityAttribute(String dbData) {
         switch (dbData) {
-            case ACTIVE:
-                return true;
-            case CANCELLED:
-                return false;
+            case "מנהל":
+            case "מפתח":
+                return Manager;
+            case "עובד":
+                return Regular;
+            case "מוקפא":
+                return NotActive;
             default:
-                return false;
+                return Regular;
         }
     }
 }

@@ -10,14 +10,21 @@ import javax.persistence.Table;
 @Entity
 @Table(name="employee")
 @Data
-public class EmployeeEntity {
+public class AuthenticationEntity {
+
+    public enum EmployeeStatus {
+        Manager, Regular, NotActive
+    }
 
     @Id
     String empId;
 
-    String fName;
+    String username;
 
-    String lName;
+    String password;
 
-    String email;
+    @Column(name = "auth")
+    EmployeeStatus status;
+
+
 }
