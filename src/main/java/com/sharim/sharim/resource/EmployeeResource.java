@@ -1,13 +1,14 @@
 package com.sharim.sharim.resource;
 
 import com.sharim.sharim.converters.EmployeeToEmployeeDtoConverter;
+import com.sharim.sharim.converters.LimitationDtoToLimitationConverter;
 import com.sharim.sharim.converters.LimitationToLimitationDtoConverter;
 import com.sharim.sharim.converters.PerformanceToPerformanceDtoConverter;
+import com.sharim.sharim.dto.LimitationDto;
+import com.sharim.sharim.dto.LimitationGroupDto;
 import com.sharim.sharim.entities.EmployeeEntity;
 import com.sharim.sharim.entities.LimitationEntity;
-import com.sharim.sharim.entities.PerformanceEmployeeEntity;
 import com.sharim.sharim.entities.PerformanceEntity;
-import com.sharim.sharim.repository.PerformanceEmployeeRepository;
 import com.sharim.sharim.services.EmployeeService;
 import com.sharim.sharim.services.LimitationService;
 import com.sharim.sharim.services.PerformanceService;
@@ -15,11 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.PermitAll;
-import javax.xml.ws.WebServiceException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +41,9 @@ public class EmployeeResource {
 
     @Autowired
     LimitationToLimitationDtoConverter limitationToLimitationDtoConverter;
+
+    @Autowired
+    LimitationDtoToLimitationConverter limitationDtoToLimitationConverter;
 
     @Autowired
     PerformanceToPerformanceDtoConverter performanceToPerformanceDtoConverter;
@@ -73,7 +74,7 @@ public class EmployeeResource {
     }
 
 
-    @RequestMapping("/{id}/limitations")
+    @RequestMapping(value = "/{id}/limitations", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> getLimitations(@PathVariable("id") String id,
                                             @RequestParam(required = true) Long from,
@@ -90,6 +91,63 @@ public class EmployeeResource {
                 .collect(Collectors.toList()), HttpStatus.OK);
 
     }
+
+
+    @RequestMapping("/{id}/limitations/{limId}")
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
+    public ResponseEntity<?> getLimitation(@PathVariable("id") String id,
+                                            @PathVariable("limId") int limId
+                                            ) throws Exception {
+
+        Optional<LimitationEntity> limitationEntity = limitationService.findById(limId);
+
+        if (!limitationEntity.isPresent()) {
+            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(limitationToLimitationDtoConverter.convert(limitationEntity.get()),HttpStatus.OK);
+
+    }
+
+
+    @RequestMapping(value = "/{id}/limitations/{limId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
+    public ResponseEntity<?> deleteLimitation(@PathVariable("id") String id,
+                                            @PathVariable("limId") int limId
+    ) throws Exception {
+
+        Optional<LimitationEntity> limitationEntity = limitationService.findById(limId);
+
+        if (!limitationEntity.isPresent()) {
+            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+        }
+
+        limitationService.delete(limitationEntity.get());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+
+    @RequestMapping(value = "/{id}/limitations", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
+    public ResponseEntity<?> addLimitation(@PathVariable("id") String id, @RequestBody LimitationGroupDto limitationGroupDto) throws Exception {
+
+        List<LimitationEntity> limitationEntityList = limitationGroupDto.getLimitationList().stream()
+                .map(limitationDto -> limitationDtoToLimitationConverter.convert(limitationDto))
+                .collect(Collectors.toList());
+
+        limitationEntityList.forEach(l -> {
+            l.setEmpId(id);
+            l.setInsertDate(new Date());
+        });
+
+        limitationService.save(limitationEntityList);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
 
 
     @RequestMapping("/{id}/performances")

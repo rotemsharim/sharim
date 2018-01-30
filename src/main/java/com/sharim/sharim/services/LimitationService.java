@@ -4,6 +4,7 @@ import com.sharim.sharim.entities.LimitationEntity;
 import com.sharim.sharim.repository.LimitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -24,8 +25,30 @@ public class LimitationService {
 
     }
 
+    public Optional<LimitationEntity> findById(int limId) {
+        return Optional.ofNullable(limitationRepository.findOne(limId));
+
+    }
+
     public Optional<List<LimitationEntity>> findByEmpIdBetweenStartDateAndEndDate(String empId, Date startDate, Date endDate) {
         return Optional.ofNullable(limitationRepository.findByEmpIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(empId, startDate, endDate));
+    }
+
+    public void delete(LimitationEntity entity) throws Exception{
+        limitationRepository.delete(entity);
+    }
+
+
+
+    public void save(List<LimitationEntity> entityList) {
+        int maxLimGroup = limitationRepository.findMaxLimGroup() + 1;
+        entityList.forEach(e -> {
+            e.setLimGroup(maxLimGroup);
+
+        });
+
+        limitationRepository.save(entityList);
+
     }
 
 }

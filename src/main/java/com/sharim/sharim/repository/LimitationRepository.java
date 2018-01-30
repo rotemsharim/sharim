@@ -2,6 +2,7 @@ package com.sharim.sharim.repository;
 
 import com.sharim.sharim.entities.LimitationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -16,5 +17,7 @@ public interface LimitationRepository extends JpaRepository<LimitationEntity, In
 
     List<LimitationEntity> findByEmpIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(String empId, Date startDate, Date endDate);
 
+    @Query("SELECT max(limGroup) FROM LimitationEntity")
+    int findMaxLimGroup();
 
 }
