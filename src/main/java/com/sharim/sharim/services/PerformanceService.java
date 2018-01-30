@@ -5,6 +5,7 @@ import com.sharim.sharim.entities.PerformanceEntity;
 import com.sharim.sharim.repository.PerformanceEmployeeRepository;
 import com.sharim.sharim.repository.PerformanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,9 +22,12 @@ public class PerformanceService {
     @Autowired
     PerformanceEmployeeRepository performanceEmployeeRepository;
 
-
     public PerformanceEntity byId(int id) {
         return performanceRepository.findOne(id);
+    }
+
+    public Optional<PerformanceEmployeeEntity> byIdAndEmpId(int id,String empId) {
+        return Optional.ofNullable(performanceEmployeeRepository.findTopById_EmpIdAndId_Performance_PerId(empId,id));
     }
 
     public Optional<List<PerformanceEmployeeEntity>> findByEmpIdAndStartDateRange(String empId, Date fromDate, Date toDate) {

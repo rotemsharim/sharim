@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface PerformanceEmployeeRepository extends JpaRepository<PerformanceEmployeeEntity, PerformanceEmployeeEntity.IdKey> {
     List<PerformanceEmployeeEntity> findById_EmpIdAndId_Performance_PerformanceDateGreaterThanEqualAndId_Performance_PerformanceDateLessThanEqual(String empId,Date fromDate,Date toDate);
+
+    PerformanceEmployeeEntity findTopById_EmpIdAndId_Performance_PerId(String empId, int perId);
 }
