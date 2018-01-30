@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface LimitationRepository extends JpaRepository<LimitationEntity, Integer> {
 
-    List<LimitationEntity> findByLimGroup(int limGroup);
+    List<LimitationEntity> findByLimGroupAndEmpId(int limGroup,String empId);
 
     List<LimitationEntity> findByEmpId(String empId);
 
@@ -19,5 +19,7 @@ public interface LimitationRepository extends JpaRepository<LimitationEntity, In
 
     @Query("SELECT max(limGroup) FROM LimitationEntity")
     int findMaxLimGroup();
+
+    LimitationEntity findUniqueByLimIdAndEmpId(int limId, String empId);
 
 }

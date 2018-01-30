@@ -16,8 +16,8 @@ public class LimitationService {
     @Autowired
     LimitationRepository limitationRepository;
 
-    public Optional<List<LimitationEntity>> findByLimGroup(int limGroup) {
-        return Optional.ofNullable(limitationRepository.findByLimGroup(limGroup));
+    public Optional<List<LimitationEntity>> findByLimGroup(int limGroup, String empId) {
+        return Optional.ofNullable(limitationRepository.findByLimGroupAndEmpId(limGroup,empId));
     }
 
     public Optional<List<LimitationEntity>> findByEmpId(String empId) {
@@ -25,8 +25,8 @@ public class LimitationService {
 
     }
 
-    public Optional<LimitationEntity> findById(int limId) {
-        return Optional.ofNullable(limitationRepository.findOne(limId));
+    public Optional<LimitationEntity> findByIdAndEmpId(int limId,String empId) {
+        return Optional.ofNullable(limitationRepository.findUniqueByLimIdAndEmpId(limId,empId));
 
     }
 
@@ -37,6 +37,7 @@ public class LimitationService {
     public void delete(LimitationEntity entity) throws Exception{
         limitationRepository.delete(entity);
     }
+
 
 
 
