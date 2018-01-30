@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -76,7 +77,24 @@ public class EmployeeLimitationResource{
             return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
         }
 
-        limitationService.delete(limitationEntity.get());
+        limitationService.delete(Arrays.asList(limitationEntity.get()));
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+
+    @RequestMapping(value = "limitations/groups/{limGroupId}", method = RequestMethod.DELETE)
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
+    public ResponseEntity<?> deleteLimitationGroup(@PathVariable("id") String id,
+                                              @PathVariable("limGroupId") int limGroupId) throws Exception {
+
+        Optional<List<LimitationEntity>> limitationEntityList = limitationService.findByLimGroup(limGroupId, id);
+
+        if (!limitationEntityList.isPresent()) {
+            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+        }
+
+        limitationService.delete(limitationEntityList.get());
 
         return new ResponseEntity<>(HttpStatus.OK);
 

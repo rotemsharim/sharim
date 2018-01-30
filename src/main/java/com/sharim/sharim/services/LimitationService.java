@@ -34,10 +34,9 @@ public class LimitationService {
         return Optional.ofNullable(limitationRepository.findByEmpIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(empId, startDate, endDate));
     }
 
-    public void delete(LimitationEntity entity) throws Exception{
-        limitationRepository.delete(entity);
+    public void delete(List<LimitationEntity> entityList) throws Exception{
+        limitationRepository.delete(entityList);
     }
-
 
 
 

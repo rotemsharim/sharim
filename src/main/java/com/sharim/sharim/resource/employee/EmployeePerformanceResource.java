@@ -1,6 +1,10 @@
 package com.sharim.sharim.resource.employee;
 
+import com.sharim.sharim.converters.EmployeePerformanceToEmployeePerformanceDtoConverter;
 import com.sharim.sharim.converters.PerformanceToPerformanceDtoConverter;
+import com.sharim.sharim.dto.EmployeePerformanceDto;
+import com.sharim.sharim.dto.PerformanceDto;
+import com.sharim.sharim.entities.PerformanceEmployeeEntity;
 import com.sharim.sharim.entities.PerformanceEntity;
 import com.sharim.sharim.services.PerformanceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,7 @@ public class EmployeePerformanceResource {
     PerformanceService performanceService;
 
     @Autowired
-    PerformanceToPerformanceDtoConverter performanceToPerformanceDtoConverter;
+    EmployeePerformanceToEmployeePerformanceDtoConverter employeePerformanceToEmployeePerformanceDtoConverter;
 
 
     @RequestMapping("performances")
@@ -36,14 +40,17 @@ public class EmployeePerformanceResource {
                                             @RequestParam(required = true) Long to) throws Exception {
 
 
-        Optional<List<PerformanceEntity>> performanceList = performanceService.findByEmpIdAndStartDateRange(id, new Date(from), new Date(to));
+        Optional<List<PerformanceEmployeeEntity>> performanceList = performanceService.findByEmpIdAndStartDateRange(id, new Date(from), new Date(to));
 
         if (!performanceList.isPresent() || performanceList.get().size() == 0) {
             return new ResponseEntity<>("no limitations for employee between these dates", HttpStatus.NO_CONTENT);
         }
 
-        return new ResponseEntity<>(performanceList.get().stream()
-                .map(p -> performanceToPerformanceDtoConverter.convert(p))
-                .collect(Collectors.toList()), HttpStatus.OK);
+        List<EmployeePerformanceDto> performanceDtoList = performanceList.get().stream()
+                .map(p -> employeePerformanceToEmployeePerformanceDtoConverter.convert(p))
+                .collect(Collectors.toList());
+
+
+        return new ResponseEntity<>(performanceDtoList, HttpStatus.OK);
     }
 }

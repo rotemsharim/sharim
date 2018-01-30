@@ -26,11 +26,13 @@ public class PerformanceService {
         return performanceRepository.findOne(id);
     }
 
-    public Optional<List<PerformanceEntity>> findByEmpIdAndStartDateRange(String empId, Date fromDate, Date toDate) {
+    public Optional<List<PerformanceEmployeeEntity>> findByEmpIdAndStartDateRange(String empId, Date fromDate, Date toDate) {
         List<PerformanceEmployeeEntity> performanceEmployeeEntityList = performanceEmployeeRepository.findById_EmpIdAndId_Performance_PerformanceDateGreaterThanEqualAndId_Performance_PerformanceDateLessThanEqual(empId,fromDate,toDate);
 
         return Optional.ofNullable(performanceEmployeeEntityList.stream()
                 .filter(e -> e.isActive() && e.getId().getPerformance().getStatus()!= PerformanceEntity.PerformanceStatus.Cancelled)
-                .map(b -> b.getId().getPerformance()).collect(Collectors.toList()));
+                .collect(Collectors.toList()));
     }
+
+
 }
