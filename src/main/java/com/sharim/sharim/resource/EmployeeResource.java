@@ -48,7 +48,7 @@ public class EmployeeResource {
     PerformanceToPerformanceDtoConverter performanceToPerformanceDtoConverter;
 
     @RequestMapping
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('Admin')")
     public ResponseEntity<?> allEmployees() {
         Optional<List<EmployeeEntity>> employeeList = employeeService.findAll();
 
@@ -65,12 +65,6 @@ public class EmployeeResource {
     @RequestMapping("/{id}")
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> findEmployee(@PathVariable("id") String id) throws Exception {
-//        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getDetails();
-//        if (!id.equals(userId)) {
-//            return new ResponseEntity<>("cannot access user",HttpStatus.FORBIDDEN);
-//        }
-
-
         Optional<EmployeeEntity> employee = employeeService.findOne(id);
         if (!employee.isPresent()) {
             return new ResponseEntity<>("employee doesn't exist", HttpStatus.NO_CONTENT);
@@ -80,6 +74,7 @@ public class EmployeeResource {
 
 
     @RequestMapping("/{id}/limitations")
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> getLimitations(@PathVariable("id") String id,
                                             @RequestParam(required = true) Long from,
                                             @RequestParam(required = true) Long to) throws Exception {
@@ -98,6 +93,7 @@ public class EmployeeResource {
 
 
     @RequestMapping("/{id}/performances")
+    @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> getPerformance(@PathVariable("id") String id,
                                             @RequestParam(required = true) Long from,
                                             @RequestParam(required = true) Long to) throws Exception {
