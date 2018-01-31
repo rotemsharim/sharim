@@ -22,4 +22,6 @@ public interface LimitationRepository extends JpaRepository<LimitationEntity, In
 
     LimitationEntity findUniqueByLimIdAndEmpId(int limId, String empId);
 
+
+
 }

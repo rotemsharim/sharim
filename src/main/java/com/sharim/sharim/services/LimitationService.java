@@ -34,6 +34,10 @@ public class LimitationService {
         return Optional.ofNullable(limitationRepository.findByEmpIdAndStartDateGreaterThanEqualAndEndDateLessThanEqual(empId, startDate, endDate));
     }
 
+    public boolean isLimitationForEmployeeBetweenDates(String empId, Date fromDate, Date toDate) {
+        return findByEmpIdBetweenStartDateAndEndDate(empId,fromDate,toDate).isPresent();
+    }
+
     public void delete(List<LimitationEntity> entityList) throws Exception{
         limitationRepository.delete(entityList);
     }
@@ -41,6 +45,10 @@ public class LimitationService {
 
 
     public void save(List<LimitationEntity> entityList) {
+
+        //filter the list - find all perofrmances between min and max ->
+        // check if allowed to add limitation (no performance in this date) - if there is -> send for confirmation
+
         int maxLimGroup = limitationRepository.findMaxLimGroup() + 1;
         entityList.forEach(e -> {
             e.setLimGroup(maxLimGroup);

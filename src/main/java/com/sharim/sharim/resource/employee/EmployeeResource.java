@@ -9,6 +9,7 @@ import com.sharim.sharim.dto.LimitationGroupDto;
 import com.sharim.sharim.entities.EmployeeEntity;
 import com.sharim.sharim.entities.LimitationEntity;
 import com.sharim.sharim.entities.PerformanceEntity;
+import com.sharim.sharim.exceptions.NotFoundException;
 import com.sharim.sharim.services.EmployeeService;
 import com.sharim.sharim.services.LimitationService;
 import com.sharim.sharim.services.PerformanceService;
@@ -52,10 +53,10 @@ public class EmployeeResource {
 
     @RequestMapping("/{id}")
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
-    public ResponseEntity<?> findEmployee(@PathVariable("id") String id) throws Exception {
+    public ResponseEntity<?> findEmployee(@PathVariable("id") String id) throws Exception, NotFoundException {
         Optional<EmployeeEntity> employee = employeeService.findOne(id);
         if (!employee.isPresent()) {
-            return new ResponseEntity<>("employee doesn't exist", HttpStatus.NO_CONTENT);
+            throw new NotFoundException();
         }
         return new ResponseEntity<>(employeeToEmployeeDtoConverter.convert(employee.get()), HttpStatus.OK);
     }

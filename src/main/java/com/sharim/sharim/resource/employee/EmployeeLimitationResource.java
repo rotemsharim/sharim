@@ -4,6 +4,7 @@ import com.sharim.sharim.converters.LimitationDtoToLimitationConverter;
 import com.sharim.sharim.converters.LimitationToLimitationDtoConverter;
 import com.sharim.sharim.dto.LimitationGroupDto;
 import com.sharim.sharim.entities.LimitationEntity;
+import com.sharim.sharim.exceptions.NotFoundException;
 import com.sharim.sharim.services.LimitationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,12 +54,12 @@ public class EmployeeLimitationResource{
     @RequestMapping("limitations/{limId}")
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> getLimitation(@PathVariable("id") String id,
-                                           @PathVariable("limId") int limId) throws Exception {
+                                           @PathVariable("limId") int limId) throws Exception, NotFoundException {
 
         Optional<LimitationEntity> limitationEntity = limitationService.findByIdAndEmpId(limId, id);
 
         if (!limitationEntity.isPresent()) {
-            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+            throw new NotFoundException();
         }
 
         return new ResponseEntity<>(limitationToLimitationDtoConverter.convert(limitationEntity.get()), HttpStatus.OK);
@@ -69,12 +70,12 @@ public class EmployeeLimitationResource{
     @RequestMapping(value = "limitations/{limId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> deleteLimitation(@PathVariable("id") String id,
-                                              @PathVariable("limId") int limId) throws Exception {
+                                              @PathVariable("limId") int limId) throws Exception, NotFoundException {
 
         Optional<LimitationEntity> limitationEntity = limitationService.findByIdAndEmpId(limId, id);
 
         if (!limitationEntity.isPresent()) {
-            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+            throw new NotFoundException();
         }
 
         limitationService.delete(Arrays.asList(limitationEntity.get()));
@@ -86,12 +87,12 @@ public class EmployeeLimitationResource{
     @RequestMapping(value = "limitations/groups/{limGroupId}", method = RequestMethod.DELETE)
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> deleteLimitationGroup(@PathVariable("id") String id,
-                                              @PathVariable("limGroupId") int limGroupId) throws Exception {
+                                              @PathVariable("limGroupId") int limGroupId) throws Exception, NotFoundException {
 
         Optional<List<LimitationEntity>> limitationEntityList = limitationService.findByLimGroup(limGroupId, id);
 
         if (!limitationEntityList.isPresent()) {
-            return new ResponseEntity<>("can't find limitation", HttpStatus.NO_CONTENT);
+            throw new NotFoundException();
         }
 
         limitationService.delete(limitationEntityList.get());
@@ -104,6 +105,8 @@ public class EmployeeLimitationResource{
     @RequestMapping(value = "limitations", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('Admin') || hasAuthority(#id)")
     public ResponseEntity<?> addLimitation(@PathVariable("id") String id, @RequestBody LimitationGroupDto limitationGroupDto) throws Exception {
+
+
 
         List<LimitationEntity> limitationEntityList = limitationGroupDto.getLimitationList().stream()
                 .map(limitationDto -> limitationDtoToLimitationConverter.convert(limitationDto))
