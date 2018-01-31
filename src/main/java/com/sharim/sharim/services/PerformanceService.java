@@ -5,6 +5,7 @@ import com.sharim.sharim.entities.PerformanceEntity;
 import com.sharim.sharim.repository.PerformanceEmployeeRepository;
 import com.sharim.sharim.repository.PerformanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,16 +22,21 @@ public class PerformanceService {
     @Autowired
     PerformanceEmployeeRepository performanceEmployeeRepository;
 
-
     public PerformanceEntity byId(int id) {
         return performanceRepository.findOne(id);
     }
 
-    public Optional<List<PerformanceEntity>> findByEmpIdAndStartDateRange(String empId, Date fromDate, Date toDate) {
+    public Optional<PerformanceEmployeeEntity> byIdAndEmpId(int id,String empId) {
+        return Optional.ofNullable(performanceEmployeeRepository.findTopById_EmpIdAndId_Performance_PerId(empId,id));
+    }
+
+    public Optional<List<PerformanceEmployeeEntity>> findByEmpIdAndStartDateRange(String empId, Date fromDate, Date toDate) {
         List<PerformanceEmployeeEntity> performanceEmployeeEntityList = performanceEmployeeRepository.findById_EmpIdAndId_Performance_PerformanceDateGreaterThanEqualAndId_Performance_PerformanceDateLessThanEqual(empId,fromDate,toDate);
 
         return Optional.ofNullable(performanceEmployeeEntityList.stream()
                 .filter(e -> e.isActive() && e.getId().getPerformance().getStatus()!= PerformanceEntity.PerformanceStatus.Cancelled)
-                .map(b -> b.getId().getPerformance()).collect(Collectors.toList()));
+                .collect(Collectors.toList()));
     }
+
+
 }

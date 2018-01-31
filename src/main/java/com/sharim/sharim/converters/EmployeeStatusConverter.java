@@ -12,7 +12,7 @@ public class EmployeeStatusConverter implements AttributeConverter<Authenticatio
     @Override
     public String convertToDatabaseColumn(AuthenticationEntity.EmployeeStatus attribute) {
         switch (attribute) {
-            case Manager:
+            case Admin:
                 return "מנהל";
             case Regular:
                 return "עובד";
@@ -28,7 +28,7 @@ public class EmployeeStatusConverter implements AttributeConverter<Authenticatio
         switch (dbData) {
             case "מנהל":
             case "מפתח":
-                return Manager;
+                return Admin;
             case "עובד":
                 return Regular;
             case "מוקפא":

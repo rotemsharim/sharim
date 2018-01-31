@@ -24,15 +24,27 @@ repositories {
 
 
 dependencies {
+//	compile('org.springframework.boot:spring-boot-starter') {
+//		exclude 'org.springframework.boot:spring-boot-starter-logging'
+//	}
+
+//	compile('org.springframework.boot:spring-boot-starter-log4j2')
+
+
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
 	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.boot:spring-boot-starter-mobile')
 
 	compile('org.springframework.security:spring-security-jwt')
+
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.7.0'
 
 	compile("org.springframework.boot:spring-boot-devtools")
 
 	compile("io.springfox:springfox-swagger2:2.7.0")
+
+	compile("org.springframework.boot:spring-boot-starter-log4j2")
 
 	runtime('mysql:mysql-connector-java')
 	compileOnly('org.projectlombok:lombok')
@@ -41,5 +53,16 @@ dependencies {
 
 	testCompile 'org.testng:testng:6.9.9'
 	testCompile "org.mockito:mockito-core:2.+"
+
+	configurations {
+
+		all*.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+
+//		runtime.exclude('org.springframework.boot:spring-boot-starter-logging')
+//		runtime.exclude('org.springframework.boot:logback-classic')
+//		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+//		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+//		exclude group: 'org.springframework.boot', module: 'logback-classic'
+	}
 
 }

@@ -1,5 +1,6 @@
 package com.sharim.sharim.dto;
 
+import com.sharim.sharim.entities.AuthenticationEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,4 +18,5 @@ public class EmployeeDto {
 
     String username;
 
+    AuthenticationEntity.EmployeeStatus status;
 }

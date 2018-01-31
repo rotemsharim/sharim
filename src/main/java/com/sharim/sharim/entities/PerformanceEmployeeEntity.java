@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "performance_emp")
@@ -18,6 +19,9 @@ public class PerformanceEmployeeEntity {
     @Column(name = "status")
     boolean active;
 
+    boolean confirm;
+
+    Date confirmDate;
 
     @Embeddable
     @Data

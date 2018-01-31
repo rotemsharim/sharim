@@ -1,24 +1,25 @@
 package com.sharim.sharim.entities;
 
 import jdk.nashorn.internal.objects.annotations.Constructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
 @Table(name = "limitation")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class LimitationEntity {
 
     @Id
     @Column(name = "lim_num")
-    int limId;
+    @GeneratedValue
+    Integer limId;
 
     String empId;
 
